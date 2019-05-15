@@ -1,0 +1,1 @@
+# azureadvocates-autoblog
