@@ -48,7 +48,7 @@ namespace autoblog
       try
       {
         var fileContents = await creator.Create();
-        await File.WriteAllTextAsync(creator.FileName, fileContents);
+        await File.WriteAllTextAsync(Path.Join("_posts", creator.FileName), fileContents);
       }
       catch (Exception ex)
       {
