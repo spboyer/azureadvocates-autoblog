@@ -166,9 +166,23 @@ namespace autoblog
             var linkItems = link.Split("\n", StringSplitOptions.RemoveEmptyEntries);
             results.AddRange(linkItems);
           }
+          else if (link.Contains(","))
+          {
+            var linkItems = link.Split(",", StringSplitOptions.RemoveEmptyEntries);
+            results.AddRange(linkItems);
+          }
+          else if (link.Contains(";"))
+          {
+            var linkItems = link.Split(";", StringSplitOptions.RemoveEmptyEntries);
+            results.AddRange(linkItems);
+          }
           else
           {
-            results.Add(link);
+            // check for "nothing" values
+            if (!string.IsNullOrEmpty(link) && !string.IsNullOrWhiteSpace(link) && !string.Equals("na", link, StringComparison.CurrentCultureIgnoreCase))
+            {
+              results.Add(link.Trim());
+            }
           }
         }
 
@@ -177,21 +191,7 @@ namespace autoblog
       return new List<string>();
     }
 
-    // private static List<string> GetContentItemContentTypes(object value)
-    // {
-    //   if (value != null)
-    //   {
-    //     var items = FieldToList(value);
-    //     var result = from ct in ContentTypes
-    //                  where items.Contains(ct.Id)
-    //                  select ct.Name;
-
-    //     return result.ToList();
-    //   }
-    //   return new List<string>();
-    // }
-
-    private static List<string> GetContentItemTechnologies(object value)
+     private static List<string> GetContentItemTechnologies(object value)
     {
       if (value != null)
       {
