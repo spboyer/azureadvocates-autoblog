@@ -12,6 +12,7 @@
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/autoblog/bin/Debug/netcoreapp2.2/autoblog.dll",
             "args": [],
+            "envFile": "${workspaceFolder}/autoblog.env",
             "cwd": "${workspaceFolder}/autoblog",
             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
             "console": "internalConsole",

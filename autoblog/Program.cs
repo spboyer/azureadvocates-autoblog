@@ -30,6 +30,11 @@ namespace autoblog
 
       var root = $"/app/{Environment.GetEnvironmentVariable("dir")}";
 
+      if (Debugger.IsAttached)
+      {
+        root = Environment.GetEnvironmentVariable("dir");
+      }
+
       if (!Directory.Exists(root))
       {
         Directory.CreateDirectory(root);
@@ -127,7 +132,7 @@ namespace autoblog
 
     private static async Task GetContentRepositoryItemsAsync()
     {
-      var fields = new List<string>() { "Title", "CDA Name", "Target Completion Date", "Topic Areas", "Technologies", "Content Type", "Category", "Description", "Links", "MS CTA Links" };
+      var fields = new List<string>() { "Title", "CA Name", "Target Completion Date", "Topic Areas", "Technologies", "Category", "Description", "Links", "MS CTA Links" };
       var records = await GetAirTableDataAsync("Content Repository", fields, "Weekly Roundup - Social + PMM");
 
 
@@ -135,10 +140,9 @@ namespace autoblog
       {
         Title = (string)r.GetField("Title"),
         Id = r.Id,
-        CDAName = GetCDAName(r.GetField("CDA Name")),
+        CDAName = GetCDAName(r.GetField("CA Name")),
         TargetCompletionDate = GetTargetCompletionDate(r.GetField("Target Completion Date")),
         Technologies = GetContentItemTechnologies(r.GetField("Technologies")),
-        //ContentType = GetContentItemContentTypes(r.GetField("Content Type")),
         Description = (string)r.GetField("Description"),
         Links = GetContentItemLinks(r.GetField("Links")),
         CTALinks = GetContentItemLinks(r.GetField("MS CTA Links"))
@@ -292,19 +296,6 @@ namespace autoblog
       })).ToList();
     }
 
-    // private static async Task GetContentTypesDataAsync()
-    // {
-    //   // Tablename: "Content Type" -> Content Type
-    //   // Fields: Name
-    //   var fields = new List<string>() { "Name" };
-    //   var records = await GetAirTableDataAsync("Content Types", fields);
-
-    //   ContentTypes = (records.Select(r => new ContentType()
-    //   {
-    //     Name = (string)r.GetField("Name"),
-    //     Id = r.Id
-    //   })).ToList();
-    // }
     private static async Task GetTechnologiesDataAsync()
     {
       // Tablename: "Technologies" -> Technologies
