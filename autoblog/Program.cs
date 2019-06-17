@@ -19,7 +19,8 @@ namespace autoblog
 
     static List<CDA> CDATeam { get; set; }
     static List<Technology> Technologies { get; set; }
-    static List<ContentType> ContentTypes { get; set; }
+
+    // static List<ContentType> ContentTypes { get; set; }
     static List<Topic> Topics { get; set; }
 
     static List<ContentItem> ContentItems { get; set; }
@@ -38,7 +39,7 @@ namespace autoblog
       output.AppendLine(Bash($"git -C {root} pull"));
 
       await GetAirTableTeamDataAsync();
-      await GetContentTypesDataAsync();
+      // await GetContentTypesDataAsync();
       await GetTopicsDataAsync();
       await GetTechnologiesDataAsync();
 
@@ -137,7 +138,7 @@ namespace autoblog
         CDAName = GetCDAName(r.GetField("CDA Name")),
         TargetCompletionDate = GetTargetCompletionDate(r.GetField("Target Completion Date")),
         Technologies = GetContentItemTechnologies(r.GetField("Technologies")),
-        ContentType = GetContentItemContentTypes(r.GetField("Content Type")),
+        //ContentType = GetContentItemContentTypes(r.GetField("Content Type")),
         Description = (string)r.GetField("Description"),
         Links = GetContentItemLinks(r.GetField("Links")),
         CTALinks = GetContentItemLinks(r.GetField("MS CTA Links"))
@@ -172,19 +173,19 @@ namespace autoblog
       return new List<string>();
     }
 
-    private static List<string> GetContentItemContentTypes(object value)
-    {
-      if (value != null)
-      {
-        var items = FieldToList(value);
-        var result = from ct in ContentTypes
-                     where items.Contains(ct.Id)
-                     select ct.Name;
+    // private static List<string> GetContentItemContentTypes(object value)
+    // {
+    //   if (value != null)
+    //   {
+    //     var items = FieldToList(value);
+    //     var result = from ct in ContentTypes
+    //                  where items.Contains(ct.Id)
+    //                  select ct.Name;
 
-        return result.ToList();
-      }
-      return new List<string>();
-    }
+    //     return result.ToList();
+    //   }
+    //   return new List<string>();
+    // }
 
     private static List<string> GetContentItemTechnologies(object value)
     {
@@ -291,19 +292,19 @@ namespace autoblog
       })).ToList();
     }
 
-    private static async Task GetContentTypesDataAsync()
-    {
-      // Tablename: "Content Type" -> Content Type
-      // Fields: Name
-      var fields = new List<string>() { "Name" };
-      var records = await GetAirTableDataAsync("Content Types", fields);
+    // private static async Task GetContentTypesDataAsync()
+    // {
+    //   // Tablename: "Content Type" -> Content Type
+    //   // Fields: Name
+    //   var fields = new List<string>() { "Name" };
+    //   var records = await GetAirTableDataAsync("Content Types", fields);
 
-      ContentTypes = (records.Select(r => new ContentType()
-      {
-        Name = (string)r.GetField("Name"),
-        Id = r.Id
-      })).ToList();
-    }
+    //   ContentTypes = (records.Select(r => new ContentType()
+    //   {
+    //     Name = (string)r.GetField("Name"),
+    //     Id = r.Id
+    //   })).ToList();
+    // }
     private static async Task GetTechnologiesDataAsync()
     {
       // Tablename: "Technologies" -> Technologies
