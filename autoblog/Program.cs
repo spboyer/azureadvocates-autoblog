@@ -155,43 +155,67 @@ namespace autoblog
       if (value != null)
       {
         var results = new List<string>();
+        results.AddRange(SplitOnKnownChars((string)value));
 
         // string contcatenated by ' and '
-        var items = ((string)value).Split(" and ", StringSplitOptions.RemoveEmptyEntries).ToList();
+        //var items = ((string)value).Split(" and ", StringSplitOptions.RemoveEmptyEntries).ToList();
 
-        foreach (var link in items)
-        {
-          if (link.Contains("\n"))
-          {
-            var linkItems = link.Split("\n", StringSplitOptions.RemoveEmptyEntries);
-            results.AddRange(linkItems);
-          }
-          else if (link.Contains(","))
-          {
-            var linkItems = link.Split(",", StringSplitOptions.RemoveEmptyEntries);
-            results.AddRange(linkItems);
-          }
-          else if (link.Contains(";"))
-          {
-            var linkItems = link.Split(";", StringSplitOptions.RemoveEmptyEntries);
-            results.AddRange(linkItems);
-          }
-          else
-          {
-            // check for "nothing" values
-            if (!string.IsNullOrEmpty(link) && !string.IsNullOrWhiteSpace(link) && !string.Equals("na", link, StringComparison.CurrentCultureIgnoreCase))
-            {
-              results.Add(link.Trim());
-            }
-          }
-        }
+        // foreach (var link in items)
+        // {
+        //   if (link.Contains("\n"))
+        //   {
+        //     var linkItems = link.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+        //     results.AddRange(linkItems);
+        //   }
+        //   else if (link.Contains(","))
+        //   {
+        //     var linkItems = link.Split(",", StringSplitOptions.RemoveEmptyEntries);
+        //     results.AddRange(linkItems);
+        //   }
+        //   else if (link.Contains(";"))
+        //   {
+        //     var linkItems = link.Split(";", StringSplitOptions.RemoveEmptyEntries);
+        //     results.AddRange(linkItems);
+        //   }
+        //   else
+        //   {
+        //     // check for "nothing" values
+        //
+        //   }
+        // }
 
         return results;
       }
       return new List<string>();
     }
 
-     private static List<string> GetContentItemTechnologies(object value)
+    private static HashSet<string> SplitOnKnownChars(string link)
+    {
+      string[] chars = { "\n", "&", "," };
+
+      var results = new HashSet<string>();
+
+      Array.ForEach(chars, c =>
+      {
+        var temp = link.Split(c, StringSplitOptions.RemoveEmptyEntries);
+        Array.ForEach(temp, t =>
+        {
+          if (!string.IsNullOrEmpty(t) &&
+                  !string.IsNullOrWhiteSpace(t) &&
+                  !string.Equals("na", t, StringComparison.CurrentCultureIgnoreCase) &&
+                  !string.Equals("n/a", t, StringComparison.CurrentCultureIgnoreCase) &&
+                  !string.Equals("-", t, StringComparison.CurrentCultureIgnoreCase)
+                  )
+          {
+            results.Add(t.Trim());
+          }
+        });
+      });
+
+      return results;
+    }
+
+    private static List<string> GetContentItemTechnologies(object value)
     {
       if (value != null)
       {
