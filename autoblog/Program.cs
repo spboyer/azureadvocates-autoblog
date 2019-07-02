@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AirtableApiClient;
 using autoblog.Model;
@@ -155,62 +156,24 @@ namespace autoblog
       if (value != null)
       {
         var results = new List<string>();
-        results.AddRange(SplitOnKnownChars((string)value));
-
-        // string contcatenated by ' and '
-        //var items = ((string)value).Split(" and ", StringSplitOptions.RemoveEmptyEntries).ToList();
-
-        // foreach (var link in items)
-        // {
-        //   if (link.Contains("\n"))
-        //   {
-        //     var linkItems = link.Split("\n", StringSplitOptions.RemoveEmptyEntries);
-        //     results.AddRange(linkItems);
-        //   }
-        //   else if (link.Contains(","))
-        //   {
-        //     var linkItems = link.Split(",", StringSplitOptions.RemoveEmptyEntries);
-        //     results.AddRange(linkItems);
-        //   }
-        //   else if (link.Contains(";"))
-        //   {
-        //     var linkItems = link.Split(";", StringSplitOptions.RemoveEmptyEntries);
-        //     results.AddRange(linkItems);
-        //   }
-        //   else
-        //   {
-        //     // check for "nothing" values
-        //
-        //   }
-        // }
+        results.AddRange(ExtractLinks((string)value));
 
         return results;
       }
       return new List<string>();
     }
 
-    private static HashSet<string> SplitOnKnownChars(string link)
+    private static HashSet<string> ExtractLinks(string linkText)
     {
-      string[] chars = { "\n", "&", "," };
-
+      var pattern = @"(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?";
+      var regex = new Regex(pattern, RegexOptions.Compiled);
       var results = new HashSet<string>();
 
-      Array.ForEach(chars, c =>
+      foreach(Match m in regex.Matches(linkText))
       {
-        var temp = link.Split(c, StringSplitOptions.RemoveEmptyEntries);
-        Array.ForEach(temp, t =>
-        {
-          if (!string.IsNullOrEmpty(t) &&
-                  !string.IsNullOrWhiteSpace(t) &&
-                  !string.Equals("na", t, StringComparison.CurrentCultureIgnoreCase) &&
-                  !string.Equals("n/a", t, StringComparison.CurrentCultureIgnoreCase) &&
-                  !string.Equals("-", t, StringComparison.CurrentCultureIgnoreCase)
-                  )
-          {
-            results.Add(t.Trim());
-          }
-        });
-      });
+        if (m.Groups.Count > 0)
+          results.Add(m.Groups[0].Value.Replace("&feature=youtu.be","").Trim());
+      }
 
       return results;
     }
