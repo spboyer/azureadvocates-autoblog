@@ -132,26 +132,6 @@ namespace autoblog.Creator
         }
       }
 
-      if (item.CTALinks.Count > 0)
-      {
-        sb.AppendLine("Related Links:");
-        foreach (var link in item.CTALinks)
-        {
-          if (!string.Equals(link.ToUpper(), "N/A"))
-          {
-            var title = await GetLinkTitleAsync(link.Trim());
-            if (!string.IsNullOrEmpty(title))
-            {
-              sb.AppendLine($"* [{title}]({link})");
-            }
-            else
-            {
-              sb.AppendLine($"* [{link}]({link})");
-            }
-          }
-        }
-      }
-
       return sb.ToString();
     }
 
