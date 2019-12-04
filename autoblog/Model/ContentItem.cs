@@ -17,6 +17,5 @@ namespace autoblog.Model
     public List<string> ContentType { get; set; }
     public string Description { get; set; }
     public List<string> Links { get; set; }
-    public List<string> CTALinks { get; set; }
   }
 }

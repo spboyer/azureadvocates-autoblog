@@ -133,7 +133,7 @@ namespace autoblog
 
     private static async Task GetContentRepositoryItemsAsync()
     {
-      var fields = new List<string>() { "Title", "CA Name", "Target Completion Date", "Topic Areas", "Technologies", "Category", "Description", "Links", "MS CTA Links" };
+      var fields = new List<string>() { "Title", "CA Name", "Target Completion Date", "Topic Areas", "Technologies", "Category", "Description", "Links" };
       var records = await GetAirTableDataAsync("Content Repository", fields, "Weekly Roundup - Social + PMM");
 
 
@@ -145,8 +145,7 @@ namespace autoblog
         TargetCompletionDate = GetTargetCompletionDate(r.GetField("Target Completion Date")),
         Technologies = GetContentItemTechnologies(r.GetField("Technologies")),
         Description = (string)r.GetField("Description"),
-        Links = GetContentItemLinks(r.GetField("Links")),
-        CTALinks = GetContentItemLinks(r.GetField("MS CTA Links"))
+        Links = GetContentItemLinks(r.GetField("Links"))
       })).ToList();
 
     }
@@ -255,12 +254,12 @@ namespace autoblog
       // Tablename: "Team Roster" -> CDA Name
       // fields: CDA Name, Twitter Handle, GitHub User Name, Photo, Bio
 
-      var fields = new List<string>() { "CDA Name", "Twitter Handle", "GitHub User Name", "Photo", "Bio" };
+      var fields = new List<string>() { "CA Name", "Twitter Handle", "GitHub User Name", "Photo", "Bio" };
       var records = await GetAirTableDataAsync("Team Roster", fields);
 
       CDATeam = (records.Select(r => new CDA()
       {
-        Name = (string)r.GetField("CDA Name"),
+        Name = (string)r.GetField("CA Name"),
         Id = r.Id,
         Twitter = (string)r.GetField("Twitter Handle"),
         GitHub = (string)r.GetField("GitHub User Name"),
