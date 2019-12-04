@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/autoblog/bin/Debug/netcoreapp2.2/autoblog.dll",
+            "program": "${workspaceFolder}/autoblog/bin/Debug/netcoreapp3.0/autoblog.dll",
             "args": [],
             "envFile": "${workspaceFolder}/autoblog.env",
             "cwd": "${workspaceFolder}/autoblog",
