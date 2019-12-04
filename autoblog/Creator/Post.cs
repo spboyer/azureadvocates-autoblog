@@ -73,7 +73,7 @@ namespace autoblog.Creator
       var post = new StringBuilder();
       post.AppendLine("---");
       post.AppendLine("layout: post");
-      post.AppendLine($"title: CDA Weekly Content Wrapup ({DateTime.Now.ToShortDateString()})");
+      post.AppendLine($"title: CDA Weekly Content Wrapup ({DateTime.Now.ToString("MMM d yyyy")})");
       post.AppendLine("subtitle: ");
       post.Append("tags: [").AppendJoin(", ", Tags.ToArray()).Append("]");
       post.AppendLine();
